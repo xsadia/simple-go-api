@@ -30,11 +30,19 @@ func (a *App) Initialize(user, password, dbname string) {
 
 	a.Router = mux.NewRouter()
 
-	//a.initializeRoutes()
+	a.initializeRoutes()
 }
 
 func (a *App) Run(address string) {
+	log.Fatal(http.ListenAndServe(address, a.Router))
+}
 
+func (a *App) initializeRoutes() {
+	a.Router.HandleFunc("/products", a.getProducts).Methods("GET")
+	a.Router.HandleFunc("/product", a.createProduct).Methods("POST")
+	a.Router.HandleFunc("/product/{id:[0-9]+}", a.getProduct).Methods("GET")
+	a.Router.HandleFunc("/product/{id:[0-9]+}", a.updateProduct).Methods("PUT")
+	a.Router.HandleFunc("/product/{id:[0-9]+}", a.deleteProduct).Methods("DELETE")
 }
 
 func (a *App) getProduct(w http.ResponseWriter, r *http.Request) {
@@ -70,7 +78,7 @@ func (a *App) getProducts(w http.ResponseWriter, r *http.Request) {
 	startQueryString, startPresent := query["start"]
 
 	if !countPresent || len(countQueryString) == 0 {
-		count = 1
+		count = 10
 	} else {
 		count, _ = strconv.Atoi(countQueryString[0])
 	}

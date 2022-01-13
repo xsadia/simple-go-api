@@ -17,7 +17,7 @@ func (p *product) getProduct(db *sql.DB) error {
 
 func (p *product) updateProduct(db *sql.DB) error {
 	_, err :=
-		db.Exec("UPDATE products SET name=$1, price=$1 WHERE id=$3",
+		db.Exec("UPDATE products SET name=$1, price=$2 WHERE id=$3",
 			p.Name, p.Price, p.ID)
 
 	return err
