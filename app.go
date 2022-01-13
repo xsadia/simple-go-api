@@ -62,6 +62,45 @@ func (a *App) getProduct(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, p)
 }
 
+func (a *App) getProducts(w http.ResponseWriter, r *http.Request) {
+	var count, start int
+
+	query := r.URL.Query()
+	countQueryString, countPresent := query["count"]
+	startQueryString, startPresent := query["start"]
+
+	if !countPresent || len(countQueryString) == 0 {
+		count = 1
+	} else {
+		count, _ = strconv.Atoi(countQueryString[0])
+	}
+
+	if !startPresent || len(startQueryString) == 0 {
+		start = 0
+	} else {
+		start, _ = strconv.Atoi(countQueryString[0])
+	}
+	// count, _ := strconv.Atoi(r.URL.Query()["count"][0])
+	// start, _ := strconv.Atoi(r.URL.Query()["start"][0])
+
+	if count > 10 {
+		count = 1
+	}
+
+	if start < 0 {
+		start = 0
+	}
+
+	products, err := getProducts(a.DB, start, count)
+
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, products)
+}
+
 func respondWithError(w http.ResponseWriter, code int, message string) {
 	respondWithJSON(w, code, map[string]string{"error": message})
 }
