@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
+	"github.com/xsadia/simple-go-api/cmd/app"
 )
 
 func GetEnv(key string) string {
@@ -17,7 +18,7 @@ func GetEnv(key string) string {
 }
 
 func main() {
-	a := App{}
+	a := app.App{}
 
 	a.Initialize(
 		GetEnv("APP_DB_USERNAME"),
