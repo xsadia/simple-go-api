@@ -10,7 +10,7 @@ import (
 
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
-	"github.com/xsadia/simple-go-api/repository"
+	"github.com/xsadia/simple-go-api/internal/repository"
 )
 
 type App struct {
